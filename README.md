@@ -9,23 +9,28 @@ This project predicts and optimizes restaurant profit across multiple channels u
 ![Heatmap](heatmap.png)
 
 ### Feature Importance
-![Feature](feature_importance.png)
+![Feature Importance](feature_importance.png)
 
 ### Profit vs Orders
-![Profit](profit_vs_orders.png)
+![Profit vs Orders](profit_vs_orders.png)
 
 ### Profit by Segment
-![Segment](profit_by_segment.png)
+![Profit by Segment](profit_by_segment.png)
 
 ## 🤖 Model
 XGBoost Regressor used for prediction.
 
 ## 📈 Results
-- Identified key drivers of profit
-- Optimized AOV for maximum profit
+- Identified key drivers of profit  
+- AOV significantly impacts profit  
+- High commission reduces profitability  
+- Optimal pricing improves total profit  
 
-## 🚀 Run App
-streamlit run analysis.py
+## 🚀 Run Project
+```bash
+streamlit run app.py
+```
 
 ## 📎 Author
 Jones Wesley
+
