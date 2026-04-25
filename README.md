@@ -1,36 +1,31 @@
 # 🍽️ Restaurant Profit Optimization
 
-## 📌 Project Overview
-This project focuses on predicting and optimizing restaurant profit across multiple channels such as in-store, UberEats, and DoorDash.
+## 📌 Overview
+This project predicts and optimizes restaurant profit across multiple channels using machine learning.
 
-## 🚀 Features
-- Data analysis and visualization
-- Profit prediction using XGBoost
-- Feature importance analysis
-- Profit optimization strategy
-- Interactive Streamlit web app
+## 📊 Visualizations
 
-## 📊 Dataset
-The dataset includes:
-- AOV (Average Order Value)
-- Monthly Orders
-- Commission Rate
-- Delivery Cost
-- Channel Shares
-- Net Profit per channel
+### Correlation Heatmap
+![Heatmap](heatmap.png)
 
-## 🤖 Model Used
-XGBoost Regressor for predicting total profit.
+### Feature Importance
+![Feature](feature_importance.png)
+
+### Profit vs Orders
+![Profit](profit_vs_orders.png)
+
+### Profit by Segment
+![Segment](profit_by_segment.png)
+
+## 🤖 Model
+XGBoost Regressor used for prediction.
 
 ## 📈 Results
-- Identified key factors affecting profit
-- Optimized AOV for maximum profitability
+- Identified key drivers of profit
+- Optimized AOV for maximum profit
 
-## 🌐 Streamlit App
-Run locally:
-```
-streamlit run app.py
-```
+## 🚀 Run App
+streamlit run analysis.py
 
 ## 📎 Author
 Jones Wesley
