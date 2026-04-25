@@ -24,7 +24,13 @@ XGBoost Regressor used for prediction.
 - Identified key drivers of profit  
 - AOV significantly impacts profit  
 - High commission reduces profitability  
-- Optimal pricing improves total profit  
+- Optimal pricing improves total profit
+
+ ## 💡 Key Insights
+- Higher orders lead to increased profit
+- Commission rates reduce overall profit
+- In-store sales are more profitable than delivery channels
+- Optimal AOV improves total profitability
 
 ## 🚀 Run Project
 ```bash
