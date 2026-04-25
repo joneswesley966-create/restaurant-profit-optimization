@@ -12,7 +12,7 @@ This project predicts and optimizes restaurant profit across multiple channels u
 ![Feature Importance](feature_importance.png)
 
 ### Profit vs Orders
-![Profit vs Orders](orders_vs_profits.png)
+![Profit vs Orders](orders_vs_profit.png)
 
 ### Profit by Segment
 ![Profit by Segment](profit_by_segment.png)
