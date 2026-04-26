@@ -34,7 +34,7 @@ XGBoost Regressor used for prediction.
 
 ## 🚀 Run Project
 ```bash
-streamlit run app.py
+streamlit run analysis.py
 ```
 
 ## 📎 Author
