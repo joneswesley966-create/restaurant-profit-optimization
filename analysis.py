@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 st.set_page_config(page_title="Restaurant Profit Optimization", layout="wide")
 
 st.title("🍽️ Restaurant Profit Optimization Dashboard")
-st.markdown("Predict and optimize profit using machine learning")
+st.markdown("Predict profit based on opreational inputs")
 
 
 # Load data
@@ -38,7 +38,7 @@ model.fit(X_train, y_train)
 st.title("Restaurant Profit Optimization")
 
 aov = st.slider("AOV", 20, 100, 40)
-orders = st.slider("Monthly Orders", 500, 3000, 1000)
+orders = st.slider("Monthly Orders", 0, 1000, 200)
 commission = st.slider("Commission Rate", 0.1, 0.5, 0.25)
 delivery = st.slider("Delivery Cost", 1.0, 6.0, 3.0)
 
@@ -49,6 +49,14 @@ dd = st.slider("DoorDash Share", 0.0, 1.0, 0.2)
 input_data = [[aov, orders, commission, delivery, instore, ue, dd]]
 prediction = model.predict(input_data)[0]
 
+from sklearn.metrics import r2_score
+
+y_pred = model.predict(X_test)
+st.write("Model Accuracy (R²):", r2_score(y_test, y_pred))
+
+st.subheader("📌 Insight")
+st.write("Higher order volume and AOV increase profit, "
+         "while high commission reduces margins.")
 
 st.subheader("💰 Predicted Profit")
 st.success(f"{int(prediction)}")
