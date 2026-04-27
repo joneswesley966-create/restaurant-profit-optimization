@@ -49,17 +49,31 @@ dd = st.slider("DoorDash Share", 0.0, 1.0, 0.2)
 input_data = [[aov, orders, commission, delivery, instore, ue, dd]]
 prediction = model.predict(input_data)[0]
 
+
+st.sidebar.header("Enter Inputs")
+
+aov = st.sidebar.slider("Average Order Value", 0, 100, 50)
+orders = st.sidebar.slider("Monthly Orders", 0, 1000, 200)
+commission = st.sidebar.slider("Commission Rate", 0.0, 1.0, 0.2)
+delivery = st.sidebar.slider("Delivery Cost", 0, 50, 10)
+
 from sklearn.metrics import r2_score
 
 y_pred = model.predict(X_test)
 st.write("Model Accuracy (R²):", r2_score(y_test, y_pred))
 
-st.subheader("📌 Insight")
-st.write("Higher order volume and AOV increase profit, "
-         "while high commission reduces margins.")
+st.subheader("📊 Business Insight")
+
+st.write("""
+- Higher order volume increases profit
+- High commission reduces profit margins
+- Balanced delivery cost improves efficiency
+""")
+
+
 
 st.subheader("💰 Predicted Profit")
-st.success(f"{int(prediction)}")
+st.success("✅ Prediction Generated Successfully")
 
 # Recommendation
 if prediction > 50000:
