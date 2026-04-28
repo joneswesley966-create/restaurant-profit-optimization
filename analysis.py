@@ -73,6 +73,7 @@ st.write("""
 
 
 st.subheader("💰 Predicted Profit")
+st.success(f"{int(prediction)}")
 st.success("✅ Prediction Generated Successfully")
 
 # Recommendation
