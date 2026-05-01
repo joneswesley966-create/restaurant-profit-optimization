@@ -14,7 +14,7 @@ st.markdown("Predict restaurant profit using machine learning")
 # ---------------------------
 # LOAD DATA
 # ---------------------------
-df = pd.read_csv("dataset.csv")
+df = pd.read_csv("SkyCity Auckland Restaurants & Bars.csv")
 
 # ---------------------------
 # CREATE TARGET
