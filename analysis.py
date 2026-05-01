@@ -38,7 +38,9 @@ df = df.rename(columns={
     'AverageOrderValue': 'AOV',
     'TotalOrders': 'Orders',
     'DeliveryCostPerOrder': 'DeliveryCost',
-    'Commission': 'CommissionRate'
+    'Commission': 'CommissionRate',
+    'MonthlyOrders': 'Orders'
+    
 })
 
 # ---------------------------
