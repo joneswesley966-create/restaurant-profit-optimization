@@ -58,9 +58,9 @@ commission = st.sidebar.slider("Commission Rate", 0.0, 1.0, 0.2)
 delivery = st.sidebar.slider("Delivery Cost", 0, 50, 10)
 
 from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score
 
-y_pred = model.predict(X_test)
-st.write("Model Accuracy (R²):", r2_score(y_test, y_pred))
+st.write("Model Accuracy (R²):", r2_score(y_test, model.predict(X_test)))
 
 st.subheader("📊 Business Insight")
 
@@ -70,7 +70,13 @@ st.write("""
 - Balanced delivery cost improves efficiency
 """)
 
+st.subheader("Scenario Analysis")
 
+low_commission = model.predict([[aov, orders, 0.1, delivery]])
+high_commission = model.predict([[aov, orders, 0.3, delivery]])
+
+st.write("Low Commission Profit:", low_commission)
+st.write("High Commission Profit:", high_commission)
 
 st.subheader("💰 Predicted Profit")
 st.success(f"{int(prediction)}")
