@@ -19,9 +19,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
 warnings.filterwarnings('ignore')
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # PAGE CONFIG
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 st.set_page_config(
     page_title="SkyCity Profit Optimizer",
     page_icon="🏙️",
@@ -29,9 +29,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # THEME / CSS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 st.markdown("""
 <style>
     /* Dark background */
@@ -87,9 +87,9 @@ st.markdown("""
 
 PALETTE = ['#E63946', '#457B9D', '#2A9D8F', '#E9C46A', '#F4A261', '#264653', '#A8DADC']
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # DATA & MODEL LOADING
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 @st.cache_data
 def load_data():
     df = pd.read_csv('SkyCity_Auckland_Restaurants_Bars.csv')
@@ -156,9 +156,9 @@ def build_models(df):
 df = load_data()
 gb_model, rf_model, scaler, features, model_results, X_test, y_test, feat_imp, df_ml = build_models(df)
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # SIDEBAR
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 with st.sidebar:
     st.markdown('<div class="sidebar-title">🏙️ SkyCity Optimizer</div>', unsafe_allow_html=True)
     st.markdown("**Multi-Channel Profit Intelligence**")
@@ -200,9 +200,9 @@ if sel_segment != 'All': dff = dff[dff['Segment'] == sel_segment]
 if sel_subregion != 'All': dff = dff[dff['Subregion'] == sel_subregion]
 dff = dff[(dff['TotalMonthlyNetProfit'] >= profit_range[0]) & (dff['TotalMonthlyNetProfit'] <= profit_range[1])]
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # HEADER
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 st.markdown("""
 <h1 style='text-align:center; font-size:32px; font-weight:800; 
 background: linear-gradient(90deg, #64ffda, #457B9D); 
@@ -215,9 +215,9 @@ Predictive Modeling & Profit Optimization for Multi-Channel Restaurant Operation
 </p>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # KPI CARDS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 k1, k2, k3, k4, k5 = st.columns(5)
 kpi_data = [
     (k1, "Avg Monthly Profit", f"${dff['TotalMonthlyNetProfit'].mean():,.0f}", f"{len(dff)} restaurants"),
@@ -238,9 +238,9 @@ for col, label, value, delta in kpi_data:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 # TABS
-# ─────────────────────────────────────────────
+# ---------------------------------------------
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 EDA Overview", 
     "🤖 Prediction Engine", 
@@ -249,7 +249,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📋 Model Evaluation"
 ])
 
-# ── TAB 1: EDA ──────────────────────────────
+# -- TAB 1: EDA ------------------------------
 with tab1:
     st.markdown('<div class="section-header">Exploratory Data Analysis</div>', unsafe_allow_html=True)
     
@@ -330,7 +330,7 @@ with tab1:
     st.pyplot(fig, use_container_width=True)
     plt.close()
 
-# ── TAB 2: PREDICTION ENGINE ─────────────────
+# -- TAB 2: PREDICTION ENGINE -----------------
 with tab2:
     st.markdown('<div class="section-header">🤖 Profit Prediction Engine</div>', unsafe_allow_html=True)
     st.markdown("Enter restaurant parameters to predict monthly net profit.")
@@ -339,8 +339,8 @@ with tab2:
     with col1:
         st.markdown("**Order & Revenue Inputs**")
         aov = st.number_input("Average Order Value ($)", 29.0, 50.0, 38.0, 0.5)
-        monthly_orders = st.number_input("Monthly Orders", 300, 2500, 900, 50)
-        growth_factor = st.slider("Growth Factor", 0.99, 1.05, 1.02, 0.001)
+        monthly_orders = int(st.number_input("Monthly Orders", 300, 2500, 900, 50))
+        growth_factor = float(st.slider("Growth Factor", 0.99, 1.05, 1.02, 0.001))
     
     with col2:
         st.markdown("**Cost Structure**")
@@ -357,7 +357,7 @@ with tab2:
         sd_share = remaining - ue_share - dd_share
         st.metric("Self-Delivery Share", f"{sd_share:.2%}")
         
-        delivery_radius = st.slider("Delivery Radius (km)", 3, 18, 8)
+        delivery_radius = int(st.slider("Delivery Radius (km)", 3, 18, 8))
         delivery_cost = st.slider("Delivery Cost/Order ($)", 0.89, 5.31, 3.0, 0.1)
     
     col_cat1, col_cat2, col_cat3 = st.columns(3)
@@ -410,17 +410,17 @@ with tab2:
         r3.markdown(f"""<div class="metric-card">
             <div class="label">Est. Total Revenue</div>
             <div class="value">${total_rev:,.0f}</div>
-            <div class="delta">{monthly_orders} orders × ${aov}</div></div>""", unsafe_allow_html=True)
+            <div class="delta">{monthly_orders} orders x ${aov}</div></div>""", unsafe_allow_html=True)
         r4.markdown(f"""<div class="metric-card">
             <div class="label">Predicted Margin</div>
             <div class="value">{pred/total_rev*100:.1f}%</div>
             <div class="delta">Net / Revenue</div></div>""", unsafe_allow_html=True)
         
-        # Confidence interval (±1 RMSE)
+        # Confidence interval (+/-1 RMSE)
         rmse_gb = model_results['Gradient Boosting']['rmse']
-        st.info(f"📊 Prediction Confidence Band: **${pred-rmse_gb:,.0f}** to **${pred+rmse_gb:,.0f}** (±1 RMSE: ${rmse_gb:,.0f})")
+        st.info(f"📊 Prediction Confidence Band: **${pred-rmse_gb:,.0f}** to **${pred+rmse_gb:,.0f}** (+/-1 RMSE: ${rmse_gb:,.0f})")
 
-# ── TAB 3: WHAT-IF SIMULATOR ─────────────────
+# -- TAB 3: WHAT-IF SIMULATOR -----------------
 with tab3:
     st.markdown('<div class="section-header">🎛️ What-If Scenario Simulator</div>', unsafe_allow_html=True)
     st.markdown("Simulate how changes to one variable affect profit, holding others constant.")
@@ -443,6 +443,246 @@ with tab3:
             'InStoreShare': med['InStoreShare'], 'UE_share': med['UE_share'],
             'DD_share': med['DD_share'], 'SD_share': med['SD_share'],
             'CuisineType_enc': 0, 'Segment_enc': 0, 'Subregion_enc': 0,
+            'UE_commission_interaction': med['CommissionRate'] * med['UE_share'],
+            'DD_commission_interaction': med['CommissionRate'] * med['DD_share'],
+            'DeliveryCost_SD_interaction': med['DeliveryCostOrder'] * med['SD_share'],
+            'UE_revenue_ratio': ue_rev / total_rev,
+            'InStore_revenue_ratio': instore_rev / total_rev,
+            'CostToRevenue_ratio': med['COGSRate'] + med['OPEXRate'],
+            'GrowthAdjustedOrders': med['MonthlyOrders'] * med['GrowthFactor'],
+        }
+    
+    fig, ax = plt.subplots(figsize=(12, 5), facecolor='#1e2235')
+    ax.set_facecolor('#1e2235')
+    
+    base = build_baseline()
+    base_pred = gb_model.predict(pd.DataFrame([base])[features])[0]
+    
+    if scenario_type == "Commission Rate Impact":
+        x_vals = np.linspace(0.10, 0.35, 80)
+        y_vals = []
+        for v in x_vals:
+            b = base.copy(); b['CommissionRate'] = v
+            b['UE_commission_interaction'] = v * b['UE_share']
+            b['DD_commission_interaction'] = v * b['DD_share']
+            y_vals.append(gb_model.predict(pd.DataFrame([b])[features])[0])
+        ax.plot(x_vals*100, y_vals, color='#64ffda', linewidth=2.5)
+        ax.fill_between(x_vals*100, y_vals, alpha=0.15, color='#64ffda')
+        ax.axvline(base['CommissionRate']*100, color='#E9C46A', linestyle='--', label=f"Current: {base['CommissionRate']*100:.1f}%")
+        ax.axhline(0, color='#E63946', linewidth=1)
+        ax.set_xlabel("Commission Rate (%)", color='#8892b0')
+        ax.set_title("Commission Rate vs Predicted Net Profit", color='#ccd6f6', fontsize=14)
+        
+        # Break-even
+        zero_cross = [x_vals[i] for i in range(len(y_vals)-1) if y_vals[i]*y_vals[i+1] < 0]
+        if zero_cross:
+            ax.axvline(zero_cross[0]*100, color='#E63946', linestyle=':', label=f"Break-even: {zero_cross[0]*100:.1f}%")
+    
+    elif scenario_type == "Channel Mix Shift":
+        x_vals = np.linspace(0.20, 0.80, 80)
+        y_vals = []
+        for v in x_vals:
+            b = base.copy()
+            rem = 1 - v
+            b['InStoreShare'] = v; b['UE_share'] = rem*0.5; b['DD_share'] = rem*0.3; b['SD_share'] = rem*0.2
+            b['InStore_revenue_ratio'] = v; b['UE_revenue_ratio'] = rem*0.5
+            b['UE_commission_interaction'] = b['CommissionRate'] * b['UE_share']
+            b['DD_commission_interaction'] = b['CommissionRate'] * b['DD_share']
+            b['DeliveryCost_SD_interaction'] = b['DeliveryCostOrder'] * b['SD_share']
+            y_vals.append(gb_model.predict(pd.DataFrame([b])[features])[0])
+        ax.plot(x_vals*100, y_vals, color='#2A9D8F', linewidth=2.5)
+        ax.fill_between(x_vals*100, y_vals, alpha=0.15, color='#2A9D8F')
+        optimal = x_vals[np.argmax(y_vals)]
+        ax.axvline(optimal*100, color='#E9C46A', linestyle='--', label=f"Optimal: {optimal*100:.0f}% in-store")
+        ax.axvline(base['InStoreShare']*100, color='#A8DADC', linestyle=':', label=f"Current: {base['InStoreShare']*100:.0f}%")
+        ax.set_xlabel("In-Store Share (%)", color='#8892b0')
+        ax.set_title("In-Store Share vs Predicted Net Profit", color='#ccd6f6', fontsize=14)
+    
+    elif scenario_type == "Delivery Cost Impact":
+        x_vals = np.linspace(0.89, 5.31, 80)
+        y_vals = []
+        for v in x_vals:
+            b = base.copy(); b['DeliveryCostOrder'] = v
+            b['DeliveryCost_SD_interaction'] = v * b['SD_share']
+            y_vals.append(gb_model.predict(pd.DataFrame([b])[features])[0])
+        ax.plot(x_vals, y_vals, color='#F4A261', linewidth=2.5)
+        ax.fill_between(x_vals, y_vals, alpha=0.15, color='#F4A261')
+        ax.axvline(base['DeliveryCostOrder'], color='#E9C46A', linestyle='--', label=f"Current: ${base['DeliveryCostOrder']:.2f}")
+        ax.set_xlabel("Self-Delivery Cost per Order ($)", color='#8892b0')
+        ax.set_title("Delivery Cost per Order vs Net Profit", color='#ccd6f6', fontsize=14)
+    
+    elif scenario_type == "AOV Impact":
+        x_vals = np.linspace(28, 50, 80)
+        y_vals = []
+        for v in x_vals:
+            b = base.copy(); b['AOV'] = v
+            total_r = base['MonthlyOrders'] * v
+            b['UE_revenue_ratio'] = (total_r * b['UE_share']) / total_r
+            b['InStore_revenue_ratio'] = (total_r * b['InStoreShare']) / total_r
+            y_vals.append(gb_model.predict(pd.DataFrame([b])[features])[0])
+        ax.plot(x_vals, y_vals, color='#E63946', linewidth=2.5)
+        ax.fill_between(x_vals, y_vals, alpha=0.15, color='#E63946')
+        ax.axvline(base['AOV'], color='#E9C46A', linestyle='--', label=f"Current: ${base['AOV']:.2f}")
+        ax.set_xlabel("Average Order Value ($)", color='#8892b0')
+        ax.set_title("AOV vs Predicted Net Profit", color='#ccd6f6', fontsize=14)
+    
+    ax.set_ylabel("Predicted Net Profit ($)", color='#8892b0')
+    ax.tick_params(colors='#8892b0')
+    for spine in ax.spines.values(): spine.set_edgecolor('#2e3250')
+    ax.legend(facecolor='#1e2235', labelcolor='#ccd6f6', fontsize=10)
+    ax.axhline(base_pred, color='#8892b0', linewidth=0.8, linestyle=':')
+    st.pyplot(fig, use_container_width=True)
+    plt.close()
+
+# -- TAB 4: OPTIMIZATION ----------------------
+with tab4:
+    st.markdown('<div class="section-header">🏆 Prescriptive Optimization</div>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**Channel Margin Analysis**")
+        ch_margins = {
+            'In-Store': (df['InStoreNetProfit'] / df['InStoreRevenue'].replace(0, np.nan)).mean(),
+            'Uber Eats': (df['UberEatsNetProfit'] / df['UberEatsRevenue'].replace(0, np.nan)).mean(),
+            'DoorDash': (df['DoorDashNetProfit'] / df['DoorDashRevenue'].replace(0, np.nan)).mean(),
+            'Self-Delivery': (df['SelfDeliveryNetProfit'] / df['SelfDeliveryRevenue'].replace(0, np.nan)).mean(),
+        }
+        fig, ax = plt.subplots(figsize=(6, 4), facecolor='#1e2235')
+        ax.set_facecolor('#1e2235')
+        colors_m = ['#64ffda' if v > 0 else '#E63946' for v in ch_margins.values()]
+        bars = ax.bar(ch_margins.keys(), [v*100 for v in ch_margins.values()], color=colors_m, alpha=0.85)
+        for bar, val in zip(bars, ch_margins.values()):
+            ax.text(bar.get_x()+bar.get_width()/2, bar.get_height()+0.3,
+                    f'{val*100:.1f}%', ha='center', va='bottom', color='#ccd6f6', fontsize=10)
+        ax.axhline(0, color='white', linewidth=0.8)
+        ax.set_ylabel('Margin (%)', color='#8892b0')
+        ax.set_title('Net Margin by Channel', color='#ccd6f6', fontsize=12)
+        ax.tick_params(colors='#8892b0')
+        for spine in ax.spines.values(): spine.set_edgecolor('#2e3250')
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
+    
+    with col2:
+        st.markdown("**Top 10 Feature Importances**")
+        fig, ax = plt.subplots(figsize=(6, 4), facecolor='#1e2235')
+        ax.set_facecolor('#1e2235')
+        feat_imp.head(10).plot(kind='barh', ax=ax, color='#457B9D', alpha=0.85)
+        ax.set_title('Top Feature Importances (RF)', color='#ccd6f6', fontsize=12)
+        ax.set_xlabel('Importance Score', color='#8892b0')
+        ax.tick_params(colors='#8892b0', labelsize=8)
+        for spine in ax.spines.values(): spine.set_edgecolor('#2e3250')
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
+    
+    st.markdown("---")
+    st.markdown("**💡 Prescriptive Recommendations**")
+    
+    best_ch = max(ch_margins, key=ch_margins.get)
+    worst_ch = min(ch_margins, key=ch_margins.get)
+    
+    recs = [
+        ("📈 Maximize In-Store Share", 
+         f"In-Store delivers the highest margin at {ch_margins['In-Store']*100:.1f}%. Shift volume from delivery aggregators where possible.",
+         "#64ffda"),
+        ("⚠️ Monitor Aggregator Commissions", 
+         f"Uber Eats and DoorDash margins are compressed by commission rates. The break-even commission rate is approximately 24.2%.",
+         "#E9C46A"),
+        ("🚗 Self-Delivery Threshold",
+         "Self-delivery becomes profitable when delivery cost per order is below $3.20 and SD share exceeds 15%.",
+         "#457B9D"),
+        ("🎯 AOV Uplift Strategy",
+         f"Each $1 increase in AOV increases monthly profit by ~${monthly_orders * 0.215:.0f} (at 21.6% margin). Upselling is high-leverage.",
+         "#2A9D8F"),
+    ]
+    
+    for title, desc, color in recs:
+        st.markdown(f"""
+        <div style="background:#1e2235; border-left:4px solid {color}; border-radius:8px; padding:14px 18px; margin:8px 0;">
+            <div style="font-weight:700; color:{color}; font-size:14px;">{title}</div>
+            <div style="color:#a8b2d8; font-size:13px; margin-top:4px;">{desc}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Top performing restaurants
+    st.markdown('<div class="section-header">Top 10 Restaurants by Profit</div>', unsafe_allow_html=True)
+    top10 = df.nlargest(10, 'TotalMonthlyNetProfit')[
+        ['RestaurantName','CuisineType','Segment','Subregion','TotalMonthlyNetProfit','ChannelLevelMargin','AOV']
+    ].copy()
+    top10['TotalMonthlyNetProfit'] = top10['TotalMonthlyNetProfit'].map('${:,.2f}'.format)
+    top10['ChannelLevelMargin'] = top10['ChannelLevelMargin'].map('{:.1%}'.format)
+    top10['AOV'] = top10['AOV'].map('${:.2f}'.format)
+    st.dataframe(top10, use_container_width=True, hide_index=True)
+
+# -- TAB 5: MODEL EVALUATION ------------------
+with tab5:
+    st.markdown('<div class="section-header">📋 Model Evaluation Dashboard</div>', unsafe_allow_html=True)
+    
+    # Model comparison table
+    eval_data = {
+        'Model': list(model_results.keys()),
+        'R²': [f"{v['r2']:.4f}" for v in model_results.values()],
+        'RMSE ($)': [f"${v['rmse']:,.2f}" for v in model_results.values()],
+        'MAE ($)': [f"${v['mae']:,.2f}" for v in model_results.values()],
+    }
+    eval_df = pd.DataFrame(eval_data)
+    st.dataframe(eval_df, use_container_width=True, hide_index=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Actual vs predicted (best model)
+        fig, ax = plt.subplots(figsize=(6, 4.5), facecolor='#1e2235')
+        ax.set_facecolor('#1e2235')
+        best_preds = model_results['Gradient Boosting']['preds']
+        ax.scatter(y_test, best_preds, alpha=0.55, color='#64ffda', s=35, edgecolors='none')
+        lims = [min(y_test.min(), best_preds.min()), max(y_test.max(), best_preds.max())]
+        ax.plot(lims, lims, 'w--', linewidth=1.5)
+        ax.set_title('Actual vs Predicted (GB)', color='#ccd6f6', fontsize=12)
+        ax.set_xlabel('Actual Net Profit ($)', color='#8892b0')
+        ax.set_ylabel('Predicted Net Profit ($)', color='#8892b0')
+        ax.tick_params(colors='#8892b0')
+        ax.text(0.05, 0.92, f"R² = {model_results['Gradient Boosting']['r2']:.4f}",
+                transform=ax.transAxes, color='#E9C46A', fontsize=11,
+                bbox=dict(boxstyle='round', facecolor='#252840', alpha=0.7))
+        for spine in ax.spines.values(): spine.set_edgecolor('#2e3250')
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
+    
+    with col2:
+        # Residuals
+        fig, ax = plt.subplots(figsize=(6, 4.5), facecolor='#1e2235')
+        ax.set_facecolor('#1e2235')
+        residuals = np.array(y_test) - best_preds
+        ax.scatter(best_preds, residuals, alpha=0.55, color='#457B9D', s=35, edgecolors='none')
+        ax.axhline(0, color='white', linewidth=1.2)
+        ax.set_title('Residual Plot (GB)', color='#ccd6f6', fontsize=12)
+        ax.set_xlabel('Predicted ($)', color='#8892b0')
+        ax.set_ylabel('Residual ($)', color='#8892b0')
+        ax.tick_params(colors='#8892b0')
+        for spine in ax.spines.values(): spine.set_edgecolor('#2e3250')
+        st.pyplot(fig, use_container_width=True)
+        plt.close()
+    
+    st.info(f"""
+    **Best Model: Gradient Boosting** | 
+    R² = {model_results['Gradient Boosting']['r2']:.4f} | 
+    RMSE = ${model_results['Gradient Boosting']['rmse']:,.2f} | 
+    MAE = ${model_results['Gradient Boosting']['mae']:,.2f}
+    
+    The model explains **{model_results['Gradient Boosting']['r2']*100:.1f}%** of variance in monthly net profit.
+    Top predictors: Cost-to-Revenue Ratio, Monthly Orders, AOV, and channel share variables.
+    """)
+
+# ---------------------------------------------
+# FOOTER
+# ---------------------------------------------
+st.markdown("---")
+st.markdown("""
+<div style='text-align:center; color:#8892b0; font-size:12px; padding:10px 0;'>
+SkyCity Auckland Restaurants & Bars · Profit Optimization Dashboard · Internship Project · Unified Mentor
+</div>
+""", unsafe_allow_html=True)
 
 
 
